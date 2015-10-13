@@ -1,15 +1,22 @@
 package com.example.jason.myapplication;
 
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
+import android.support.design.widget.TabLayout;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 
 public class MainActivity extends AppCompatActivity {
+
+    // name a ViewPager variable. A ViewPager is a layout manager that allows the user to
+    // flip left and right through pages of data. You supply an PagerAdapter to generate the
+    // pages that the view shows. mViewPager host the contents supplied by the PagerAdapter
+
+    // PagerAdapter is an class that represents each page as a Fragment.
+    // mSectionsPagerAdapter will provide fragments for each page.
+    SectionsPagerAdapter mSectionsPagerAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -18,14 +25,37 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+        //create a TabLayout object that references the view in activity main.
+        TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
+        //create a ViewPager object that references the view in activity main.
+        final ViewPager mViewPager = (ViewPager) findViewById(R.id.pager);
+        //create an Adapter
+        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
+        //create tabs
+        tabLayout.setTabsFromPagerAdapter(mSectionsPagerAdapter);
+        //supply the ViewPager with the adapter
+        mViewPager.setAdapter(mSectionsPagerAdapter);
+
+        //create viewPager listeners which a TabLayout listener.
+       mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
+        tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+            public void onTabSelected(TabLayout.Tab tab) {
+                mViewPager.setCurrentItem(tab.getPosition());
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
             }
         });
+
+
     }
 
     @Override
